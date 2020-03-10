@@ -5,7 +5,7 @@ using System.Linq;
 
 public class SpecialMoveText : MonoBehaviour
 {
-    public List<string> specialMoveNameList { get; private set; }
+    public List<string> specialMoveNameList
         = new List<string>();
     
     private void Awake()
