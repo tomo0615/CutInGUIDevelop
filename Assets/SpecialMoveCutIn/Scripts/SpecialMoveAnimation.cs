@@ -1,18 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpecialMoveAnimation : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private Text OneByOneText = null;
+
+    [SerializeField]
+    private SpecialMoveText _specialMoveText = null;
+
+    [SerializeField]
+    private AudioClip nameShowSE = null;
+
+    [SerializeField]
+    private AudioClip SpecialMoveNameSE = null;
+
+    public void PlayAnimation()
     {
-        
+        //一文字ずつを表示
+        ShowNameOneByOne();
+
+        //最後に
+        ShowSpecialMoveName();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ShowNameOneByOne()
     {
-        
+
     }
+
+    private void ShowSpecialMoveName()
+    {
+
+    }
+
+
+
 }
