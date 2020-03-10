@@ -16,13 +16,24 @@ public class SpecialMoveAnimation : MonoBehaviour
     [SerializeField]
     private SpecialMoveText _specialMoveText = null;
 
-    /*
+    
     [SerializeField]
     private AudioClip nameShowSE = null;
 
     [SerializeField]
     private AudioClip SpecialMoveNameSE = null;
-    */
+
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Start()
+    {
+        _specialMoveText.gameObject.SetActive(false);
+    }
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Space))
@@ -59,6 +70,7 @@ public class SpecialMoveAnimation : MonoBehaviour
                 yield return null;
             }
 
+            _audioSource.PlayOneShot(nameShowSE);
             yield return new WaitForSeconds(textIntervalTime);
 
             oneByOneText.text = "";
@@ -69,6 +81,11 @@ public class SpecialMoveAnimation : MonoBehaviour
     {
         yield return null;
 
+        _audioSource.PlayOneShot(SpecialMoveNameSE);
         _specialMoveText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+
+        _specialMoveText.gameObject.SetActive(false);
     }
 }
