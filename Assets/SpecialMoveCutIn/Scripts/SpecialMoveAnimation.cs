@@ -50,17 +50,20 @@ public class SpecialMoveAnimation : MonoBehaviour
         _specialMoveText.gameObject.SetActive(false);
 
         Vector3 maxTextScala = oneByOneTextRect.localScale * 2;
+
         foreach (string nameText in _specialMoveText.specialMoveNameList)
         {
-            oneByOneTextRect.localScale = maxTextScala;
+            SetTextScale(maxTextScala);
 
-            oneByOneText.color -= Color.black;
+            SetTextColor(oneByOneText.color - Color.black);
 
-            oneByOneText.text = nameText;
+            SetTextString(nameText);
 
-            for(int i = 0; i < 5; i++)
+            //TODO：マジックナンバーを消す
+            for (int i = 0; i < 5; i++)
             {
                 oneByOneTextRect.localScale -= maxTextScala / 10;
+                //SetTextScale(maxTextScala / 10);
                 oneByOneText.color += Color.black / 5;
                 yield return null;
             }
@@ -68,18 +71,34 @@ public class SpecialMoveAnimation : MonoBehaviour
             _audioSource.PlayOneShot(nameShowSE);
             yield return new WaitForSeconds(textIntervalTime);
 
-            oneByOneText.text = "";
+            SetTextString("");
         }
+    }
+
+    //TODO：Textの変化をpureクラスにまとめる
+    private void SetTextString(string text)
+    {
+        oneByOneText.text = text;
+    }
+
+    private void SetTextScale(Vector3 scale)
+    {
+        oneByOneTextRect.localScale = scale;
+    }
+
+    private void SetTextColor(Color color)
+    {
+        oneByOneText.color = color;
     }
 
     private IEnumerator ShowSpecialMoveName()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
 
         _audioSource.PlayOneShot(SpecialMoveNameSE);
         _specialMoveText.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(3f);
 
         _specialMoveText.gameObject.SetActive(false);
     }
