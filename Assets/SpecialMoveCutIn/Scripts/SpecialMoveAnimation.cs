@@ -2,33 +2,28 @@
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class SpecialMoveAnimation : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Header("文字の表示間隔（秒）")]
     private float textIntervalTime = 0.1f;
 
-    [SerializeField]
+    [SerializeField, Header("一文字表示用テキスト")]
     private Text oneByOneText = null;
-
     private RectTransform oneByOneTextRect
         => oneByOneText.gameObject.GetComponent<RectTransform>();
 
-    [SerializeField]
+    [SerializeField, Header("必殺技名コンポーネント")]
     private SpecialMoveText _specialMoveText = null;
-
     
-    [SerializeField]
+    [SerializeField, Header("OneByOneText表示の音声")]
     private AudioClip nameShowSE = null;
 
-    [SerializeField]
+    [SerializeField, Header("必殺技表示の音声")]
     private AudioClip SpecialMoveNameSE = null;
 
-    private AudioSource _audioSource;
-
-    private void Awake()
-    {
-        _audioSource = GetComponent<AudioSource>();
-    }
+    private AudioSource _audioSource
+        => GetComponent<AudioSource>();
 
     private void Start()
     {
