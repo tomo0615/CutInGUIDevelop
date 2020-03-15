@@ -25,10 +25,15 @@ public class SpecialMoveAnimation : MonoBehaviour
     private AudioSource _audioSource
         => GetComponent<AudioSource>();
 
-    private void Start()
+    private TextChanger _textChanger;
+
+    private void Awake()
     {
+        _textChanger = new TextChanger(oneByOneText, oneByOneTextRect);
+
         _specialMoveText.gameObject.SetActive(false);
     }
+
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Space))
@@ -53,11 +58,13 @@ public class SpecialMoveAnimation : MonoBehaviour
 
         foreach (string nameText in _specialMoveText.specialMoveNameList)
         {
-            SetTextScale(maxTextScala);
+            _textChanger.SetTextScale(maxTextScala);
+            //SetTextScale(maxTextScala);
+            _textChanger.SetTextColor(oneByOneText.color - Color.black);
+            //SetTextColor(oneByOneText.color - Color.black);
 
-            SetTextColor(oneByOneText.color - Color.black);
-
-            SetTextString(nameText);
+            _textChanger.SetTextString(nameText);
+            //SetTextString(nameText);
 
             //TODO：マジックナンバーを消す
             for (int i = 0; i < 5; i++)
@@ -71,11 +78,12 @@ public class SpecialMoveAnimation : MonoBehaviour
             _audioSource.PlayOneShot(nameShowSE);
             yield return new WaitForSeconds(textIntervalTime);
 
-            SetTextString("");
+            _textChanger.SetTextString("");
         }
     }
 
     //TODO：Textの変化をpureクラスにまとめる
+    /*
     private void SetTextString(string text)
     {
         oneByOneText.text = text;
@@ -90,7 +98,7 @@ public class SpecialMoveAnimation : MonoBehaviour
     {
         oneByOneText.color = color;
     }
-
+    */
     private IEnumerator ShowSpecialMoveName()
     {
         yield return new WaitForSeconds(1f);
