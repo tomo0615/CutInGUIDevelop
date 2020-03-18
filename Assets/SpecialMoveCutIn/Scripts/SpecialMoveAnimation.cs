@@ -11,9 +11,8 @@ public class SpecialMoveAnimation : MonoBehaviour
     [SerializeField, Header("文字アニメーションの閾値")]
     private float textAnimationThreshold = 3f;
 
-    [SerializeField, Header("一文字表示用テキスト")]
-    private Text oneByOneText = null;
-    private RectTransform oneByOneTextRect;
+    [SerializeField, Header("一文字表示用コンポーネント")]
+    private OneByOneText _oneByOneText = null;
 
     [SerializeField, Header("必殺技名コンポーネント")]
     private SpecialMoveText _specialMoveText = null;
@@ -23,18 +22,11 @@ public class SpecialMoveAnimation : MonoBehaviour
 
     private AudioSource _audioSource;
 
-    private TextChanger _textChanger;
-
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-
-        oneByOneTextRect
-            = oneByOneText.gameObject.GetComponent<RectTransform>();
         
         _specialMoveText.gameObject.SetActive(false);
-
-        _textChanger = new TextChanger(oneByOneText, oneByOneTextRect);
     }
 
     private void Update()
@@ -58,33 +50,18 @@ public class SpecialMoveAnimation : MonoBehaviour
     {
         _specialMoveText.gameObject.SetActive(false);
 
-        Vector3 maxTextScala = oneByOneTextRect.localScale * 2;
+        _oneByOneText.gameObject.SetActive(true);
 
         foreach (string nameText in _specialMoveText.specialMoveNameList)
         {
-            _textChanger.SetTextScale(maxTextScala);
-
-            _textChanger.SetTextColor(oneByOneText.color - Color.black);
-
-            _textChanger.SetTextString(nameText);
-
-            for (int i = 0; i < textAnimationThreshold; i++)
-            {
-                _textChanger.SetTextScale(
-                    oneByOneTextRect.localScale - maxTextScala / (textAnimationThreshold * 2));
-
-                _textChanger.SetTextColor(
-                    oneByOneText.color + Color.black / textAnimationThreshold);
-
-                yield return null;
-            }
+            yield return _oneByOneText.ViewOneByOneText(nameText, textAnimationThreshold);
 
             _audioSource.PlayOneShot(_soundTable.nameShowSE);
 
             yield return new WaitForSeconds(textIntervalTime);
-
-            _textChanger.SetTextString("");
         }
+
+        _oneByOneText.gameObject.SetActive(false);
     }
 
     private IEnumerator ShowSpecialMoveName()
