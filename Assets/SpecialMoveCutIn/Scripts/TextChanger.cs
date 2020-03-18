@@ -25,6 +25,6 @@ public class TextChanger
 
     public void SetTextColor(Color color)
     {
-        _rectTransform.color = color;
+        _text.color = color;
     }
 }

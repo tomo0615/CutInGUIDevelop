@@ -6,36 +6,40 @@ using System.Collections;
 public class SpecialMoveAnimation : MonoBehaviour
 {
     [SerializeField, Header("文字の表示間隔（秒）")]
-    private float textIntervalTime = 0.1f;
+    private float textIntervalTime = 0.001f;
+
+    [SerializeField, Header("文字アニメーションの閾値")]
+    private float textAnimationThreshold = 3f;
 
     [SerializeField, Header("一文字表示用テキスト")]
     private Text oneByOneText = null;
-    private RectTransform oneByOneTextRect
-        => oneByOneText.gameObject.GetComponent<RectTransform>();
+    private RectTransform oneByOneTextRect;
 
     [SerializeField, Header("必殺技名コンポーネント")]
     private SpecialMoveText _specialMoveText = null;
-    
-    [SerializeField, Header("OneByOneText表示の音声")]
-    private AudioClip nameShowSE = null;
 
-    [SerializeField, Header("必殺技表示の音声")]
-    private AudioClip SpecialMoveNameSE = null;
+    [SerializeField]
+    private SoundTable _soundTable = null;
 
-    private AudioSource _audioSource
-        => GetComponent<AudioSource>();
+    private AudioSource _audioSource;
 
     private TextChanger _textChanger;
 
     private void Awake()
     {
-        _textChanger = new TextChanger(oneByOneText, oneByOneTextRect);
+        _audioSource = GetComponent<AudioSource>();
 
+        oneByOneTextRect
+            = oneByOneText.gameObject.GetComponent<RectTransform>();
+        
         _specialMoveText.gameObject.SetActive(false);
+
+        _textChanger = new TextChanger(oneByOneText, oneByOneTextRect);
     }
 
     private void Update()
     {
+        //デバック用
         if (Input.GetKeyUp(KeyCode.Space))
         {
             StartCoroutine(PlayAnimation());
@@ -59,54 +63,37 @@ public class SpecialMoveAnimation : MonoBehaviour
         foreach (string nameText in _specialMoveText.specialMoveNameList)
         {
             _textChanger.SetTextScale(maxTextScala);
-            //SetTextScale(maxTextScala);
+
             _textChanger.SetTextColor(oneByOneText.color - Color.black);
-            //SetTextColor(oneByOneText.color - Color.black);
 
             _textChanger.SetTextString(nameText);
-            //SetTextString(nameText);
 
-            //TODO：マジックナンバーを消す
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < textAnimationThreshold; i++)
             {
-                oneByOneTextRect.localScale -= maxTextScala / 10;
-                //SetTextScale(maxTextScala / 10);
-                oneByOneText.color += Color.black / 5;
+                _textChanger.SetTextScale(
+                    oneByOneTextRect.localScale - maxTextScala / (textAnimationThreshold * 2));
+
+                _textChanger.SetTextColor(
+                    oneByOneText.color + Color.black / textAnimationThreshold);
+
                 yield return null;
             }
 
-            _audioSource.PlayOneShot(nameShowSE);
+            _audioSource.PlayOneShot(_soundTable.nameShowSE);
+
             yield return new WaitForSeconds(textIntervalTime);
 
             _textChanger.SetTextString("");
         }
     }
 
-    //TODO：Textの変化をpureクラスにまとめる
-    /*
-    private void SetTextString(string text)
-    {
-        oneByOneText.text = text;
-    }
-
-    private void SetTextScale(Vector3 scale)
-    {
-        oneByOneTextRect.localScale = scale;
-    }
-
-    private void SetTextColor(Color color)
-    {
-        oneByOneText.color = color;
-    }
-    */
     private IEnumerator ShowSpecialMoveName()
     {
-        yield return new WaitForSeconds(1f);
+        _audioSource.PlayOneShot(_soundTable.SpecialMoveNameSE);
 
-        _audioSource.PlayOneShot(SpecialMoveNameSE);
         _specialMoveText.gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         _specialMoveText.gameObject.SetActive(false);
     }

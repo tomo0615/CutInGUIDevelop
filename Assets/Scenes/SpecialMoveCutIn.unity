@@ -386,5 +386,31 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7740097584624015653, guid: 3b6072e664ce85b42b5b297a91910fd5,
+        type: 3}
+      propertyPath: textIntervalTime
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7740097584624015653, guid: 3b6072e664ce85b42b5b297a91910fd5,
+        type: 3}
+      propertyPath: textAnimationThreshold
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7740097584624015653, guid: 3b6072e664ce85b42b5b297a91910fd5,
+        type: 3}
+      propertyPath: _soundTable
+      value: 
+      objectReference: {fileID: 11400000, guid: f8827ae661d9c464f8bc66b98ae29be6,
+        type: 2}
+    - target: {fileID: 7740097585606130597, guid: 3b6072e664ce85b42b5b297a91910fd5,
+        type: 3}
+      propertyPath: m_Name
+      value: SpecialMoveText
+      objectReference: {fileID: 0}
+    - target: {fileID: 7740097584467989378, guid: 3b6072e664ce85b42b5b297a91910fd5,
+        type: 3}
+      propertyPath: m_Text
+      value: "\u30D1\u30F3\u30C1"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b6072e664ce85b42b5b297a91910fd5, type: 3}
